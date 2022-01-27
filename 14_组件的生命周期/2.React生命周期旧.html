@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>React生命周期（旧）</title>
+        <script src="../js/react.development.js"></script>
+        <script src="../js/react-dom.development.js"></script>
+        <script src="../js/babel.min.js"></script>
+        <style>
+            .a {
+                width: 400px;
+                height: 200px;
+                background-color: orange;
+            }
+            .b {
+                padding: 5px;
+                background-color: gray;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="test"></div>
+        <script type="text/babel">
+            class Count extends React.Component {
+                constructor() {
+                    console.log('constructor')
+                    super()
+                    this.state = { count: 0 }
+                }
+
+                add = () => {
+                    const { count } = this.state
+                    this.setState({ count: count + 1 })
+                }
+
+                death = () => {
+                    ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+                }
+
+                must = () => {
+                    this.forceUpdate()
+                }
+
+                UNSAFE_componentWillMount() {
+                    console.log('componentWillMount')
+                }
+
+                componentDidMount() {
+                    console.log('componentDidMount')
+                }
+
+                componentWillUnmount() {
+                    console.log('componentWillUnmount')
+                }
+
+                shouldComponentUpdate() {
+                    console.log('shouldComponentUpdate')
+                    return false
+                }
+
+                UNSAFE_componentWillUpdate() {
+                    console.log('componentWillUpdate')
+                }
+
+                componentDidUpdate() {
+                    console.log('componentDidUpdate')
+                }
+
+                render() {
+                    console.log('render')
+                    return (
+                        <div>
+                            <h1>当前求和为:{this.state.count}</h1>
+                            <button onClick={this.add}>点我+1</button>
+                            <button onClick={this.death}>点我卸载组件</button>
+                            <button onClick={this.must}>强制render</button>
+                        </div>
+                    )
+                }
+            }
+
+            class A extends React.Component {
+                state = { carname: '奔驰' }
+                changeCar = () => {
+                    this.setState({ carname: '奔驰C63' })
+                }
+                render() {
+                    const { carname } = this.state
+                    return (
+                        <div className="a">
+                            <h3>我是A组件，我的车是:{carname}</h3>
+                            <button onClick={this.changeCar}>换车</button>
+                            <B carname={carname} />
+                        </div>
+                    )
+                }
+            }
+
+            class B extends React.Component {
+                UNSAFE_componentWillReceiveProps() {
+                    console.log('componentWillReceiveProps')
+                }
+                componentDidMount() {
+                    console.log('componetnDidMount')
+                }
+                shouldComponentUpdate() {
+                    console.log('B----shouldComponentUpdate')
+                    return true
+                }
+                UNSAFE_componentWillUpdate() {
+                    console.log('B----UNSAFE_componentWillUpdate')
+                }
+                render() {
+                    console.log('B-----rander')
+                    return (
+                        <div className="b">
+                            <h3>我是B组件，我收到父亲给我的车是:{this.props.carname}</h3>
+                        </div>
+                    )
+                }
+            }
+            ReactDOM.render(<A />, document.getElementById('test'))
+        </script>
+    </body>
+</html>

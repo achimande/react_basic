@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>React生命周期（旧）</title>
+        <script src="../js/17.0.1/react.development.js"></script>
+        <script src="../js/17.0.1/react-dom.development.js"></script>
+        <script src="../js/17.0.1/babel.min.js"></script>
+        <style>
+            .a {
+                width: 400px;
+                height: 200px;
+                background-color: orange;
+            }
+            .b {
+                padding: 5px;
+                background-color: gray;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="test"></div>
+        <script type="text/babel">
+            class Count extends React.Component {
+                constructor() {
+                    console.log('constructor')
+                    super()
+                    this.state = { count: 0 }
+                }
+
+                // static getDerivedStateFromProps(props) {
+                //     console.log('getDerivedStateFromProps', props)
+                //     return { count: props.a }
+                // }
+
+                getSnapshotBeforeUpdate() {
+                    console.log('getSnapshotBeforeUpdate')
+                    return 'achimande'
+                }
+
+                componentDidUpdate(prevProps, prevState, snapshotValue) {
+                    console.log('componentDidUpdate', prevProps, prevState, snapshotValue)
+                }
+
+                add = () => {
+                    const { count } = this.state
+                    this.setState({ count: count + 1 })
+                }
+
+                death = () => {
+                    ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+                }
+
+                must = () => {
+                    this.forceUpdate()
+                }
+
+                render() {
+                    console.log('render')
+                    return (
+                        <div>
+                            <h1>当前求和为:{this.state.count}</h1>
+                            <button onClick={this.add}>点我+1</button>
+                            <button onClick={this.death}>点我卸载组件</button>
+                            <button onClick={this.must}>强制render</button>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Count a={666} />, document.getElementById('test'))
+        </script>
+    </body>
+</html>

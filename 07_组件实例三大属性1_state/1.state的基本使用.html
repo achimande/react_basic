@@ -16,9 +16,15 @@
                 constructor(pros) {
                     super(pros)
                     this.state = { isHot: true }
+                    this.changeWeather = this.changeWeather.bind(this)
                 }
                 render() {
-                    return <h1 onClick={show}>今天天气很{getIsHot() ? '炎热' : '凉爽'}</h1>
+                    return <h1 onClick={this.changeWeather}>今天天气很{this.state.isHot ? '炎热' : '凉爽'}</h1>
+                }
+                changeWeather() {
+                    console.log('@', this)
+                    const isHot = this.state.isHot
+                    this.setState({ isHot: !isHot })
                 }
             }
             ReactDOM.render(<Weather />, document.getElementById('test'))
@@ -30,13 +36,13 @@
             // btn.addEventListener('click', () => {
             //     alert(1)
             // })
-            function show() {
-                alert(1)
-            }
+            // function show() {
+            //     alert(1)
+            // }
 
-            function getIsHot() {
-                return true
-            }
+            // function getIsHot() {
+            //     return true
+            // }
         </script>
     </body>
 </html>
